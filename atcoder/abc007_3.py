@@ -1,30 +1,41 @@
-h ,w = map(int,raw_input().split())
+r, c = map(int,raw_input().split())
+sx , sy = map(int,raw_input().split())
+sx -= 1
+sy -= 1
+gx , gy = map(int,raw_input().split())
+gx -= 1
+gy -= 1
 
-sy, sx = map(int,raw_input().split())
+field = [0 for i in range(r)]
+inf = r*c*10
+visited = [[inf for i in range(c)] for i in range(r)]
 
-gy, gx = map(int,raw_input().split())
+queue = []
 
-arr = [raw_input() for i in range(h)]
+for i in range(r):
+	field[i] = list(raw_input())
 
-inf = float("inf")
-distance = [[inf for i in range(w)] for j in range(h)]
-distance[sy-1][sx-1] = 0
-queue = [[sy-1,sx-1,0]]
+
+queue.append([sx,sy])
+visited[sy][sx] = 0
+isfound = False
+
 direct = [[0,-1],[1,0],[0,1],[-1,0]]
 
-while queue :
-	ty, tx, cost = queue.pop(0)
+while len(queue) > 0 :
 
-	if ty == gy-1 and tx == gx-1 :
-		print  distance[ty][tx]
-		quit()
+	coord = queue.pop()
+	
+	if coord[0] == gy and coord[1] == gx :
+		isfound = True
+		break
 
-	for y,x in direct :
-		dy = ty + y
-		dx = tx + x
-
-		if -1 < dy < h and -1 < dx < w and arr[dy][dx] == '.' and distance[dy][dx] == inf :
-			distance[dy][dx] = cost + 1
-			queue.append([dy,dx,cost + 1])
-
-
+	else :
+		for i in range(4):
+			dx = coord[0] + direct[i][0]
+			dy = coord[1] + direct[i][1]
+			if -1 < dx and dx < c and -1 < dy and dy < r and visited[dy][dx] == inf and field[dy][dx] != '#' :
+				visited[dy][dx] = visited[coord[1]][coord[0]] + 1
+				queue.insert(0,[dx,dy])
+				
+print visited[gx][gy]
