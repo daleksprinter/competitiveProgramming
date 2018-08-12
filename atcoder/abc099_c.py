@@ -1,34 +1,32 @@
 n = int(input())
 
-arr6 = []
-for i in range(10):
-	arr6.append(6**i)
-
-arr9 = []
-for i in range(10):
-	arr9.append(9**i)
+dp = [i for i in range(101010)]
 
 
-ans = float("inf")
-for i in range(n+1):
-	count = 0
-	tmp = i
-	while tmp > 0:
-		t = 0
-		while arr6[t] <= tmp:
-			t+=1
+t = 20
 
-		tmp -= arr6[t-1]
-		count += 1
+while True:
+	for i in range(101010):
+		if 6**t+(i+1) < 101010:
+			dp[6**t+(i)] = min(dp[6**t+(i)], dp[i] + 1)
 
-	tmp = n-i
-	while tmp > 0:
-		t = 0
-		while arr9[t] <= tmp:
-			t += 1
-		tmp -= arr9[t-1]
-		count += 1
+	t -= 1
+	if t == 0:
+		break
 
-	ans = min(ans,count)
+t = 20
+while True:
+	for i in range(101010):
+		if 9**t+(i+1) < 101010:
+			dp[9**t+(i)] = min(dp[9**t+(i)], dp[i] + 1)
 
-print ans
+	t -= 1
+	if t == 0:
+		break
+
+i = 0
+while i+1 < 101010:
+	dp[i+1] = min(dp[i+1],dp[i]+1)
+	i += 1
+
+print dp[n]
