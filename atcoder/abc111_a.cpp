@@ -35,24 +35,13 @@ signed main(){
     std::ios::sync_with_stdio(false);
     std::cin.tie(0);
 
-    int n = input();
-
-    vector<int> arr;
-    while(n > 0){
-        arr.push_back(n%10);
-        n /= 10;
+    string s = raw_input();
+    rep(i,0,s.size()){
+        if(s[i] == '9') cout << '1';
+        else if(s[i] == '1') cout << '9';
+        else cout << s[i];
     }
-
-    int ans = 0;
-    int t = 1;
-    rep(i,0,arr.size()){
-        if(arr[i] == 1) arr[i] = 9;
-        else if(arr[i] == 9) arr[i] = 1;
-
-        ans += arr[i] * t;
-        t *= 10;
-    }
-    print(ans);
+    cout << endl;
 
 
 }
