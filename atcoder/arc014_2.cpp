@@ -66,7 +66,7 @@ signed main(){
     rep(i,1,n){
         bool judge = false;
 
-        rep(j,0,i) if(arr[i] == arr[j]) judge = true;
+        rep(j,0,i) if(arr[i].compare(arr[j]) == 0) judge = true;
 
         if(arr[i].front() != arr[i-1].back()) judge = true;
         
@@ -74,14 +74,16 @@ signed main(){
         if(judge){
             if(i % 2 == 0){
                 print("LOSE");
+                return 0;
             }else{
                 print("WIN");
+                return 0;
             }
-            return 0;
         }
     }
 
     print("DRAW");
+    return 0;
 
 
 
