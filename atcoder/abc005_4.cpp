@@ -77,6 +77,19 @@ int cumsum(int x1, int y1, int c, int d){
 
 }
 
+int takosum(int a){
+    int tako = 0;
+    rep(i,0,n){
+        rep(j,0,n){
+            rep(k,1,a + 1){// k = height , a/k = width
+                chmax(tako, cumsum(i,j, i + k - 1, j + (a / k) - 1));
+            }
+        }
+    }
+    return tako;
+
+}
+
 
 signed main(){
 
@@ -113,6 +126,9 @@ signed main(){
     rep(i,1,takoarea.size()){
         chmax(takoarea[i], takoarea[i-1]);
     }
+
+
+
 
 
 
