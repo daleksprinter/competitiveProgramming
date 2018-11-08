@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+#include "bits/stdc++.h"
 using namespace std;
 
 
@@ -10,15 +10,19 @@ using namespace std;
 #define all(v) (v).begin(), (v).end()
 #define each(s,itr) for(auto (itr) = s.begin(); (itr) != s.end(); (itr)++)
 #define sum(v) accumulate(all(v), (0LL))
-#define Sort(v) sort(all(v))
+
+
+/* alias */
+template<class T> using vec = vector<T>;
+typedef vector<int> vi;
+typedef pair<int, int> pi;
 
 
 /* constant */
-const int inf = 100100100100100100;
-const int mod = 1000000007;
+const int inf = pow(2, 62);
+const int mod = 1e9 + 7;
 int dx[8]={1,0,-1,0,-1,1,-1,1};
 int dy[8]={0,1,0,-1,-1,-1,1,1};
-
 
 /* io_method */
 int input(){int tmp;cin >> tmp;return tmp;}
@@ -35,60 +39,60 @@ template<class T, class U> void print(map<T, U> mp){cout << "{";each(mp, e){cout
 /* general_method */
 template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
 template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
-vector<int> cs(vector<int> arr){
-    vector<int> tmp;
-    if(arr.size() == 0) return tmp;
-    tmp.push_back(arr[0]);
-    rep(i,1,arr.size()){
-        tmp.push_back(tmp.back() + arr[i]);
-    }
-    return tmp;
-}
-
-/* math_library */
-int gcd(int a, int b){ if(b == 0) return a; return gcd(b, a % b);}
-int lcm(int a, int b){ return a * b / gcd(a,b);}
 
 
-vector<int> factors(int n){
-    vector<int> facts;
-    int i = 1;
-    while(i*i < n){
-        if(n % i == 0){
-            facts.push_back(i);
-            facts.push_back(n/i);
-        }
-        i++;
-    }
-    int sq = (int)sqrt(n);
-    if(sq * sq == n) facts.push_back(sq);
-    return facts;
-}
+
 
 /* main */
 
-int n;
-vector<vector<int> > takoyaki;
+struct cumsum2d{
+    int x;
+    int y;
+    vector<vector<int>> arr;
 
-int cumsum(int x1, int y1, int c, int d){
-    int x2 = min(c, n-1), y2 = min(d, n-1);
+    cumsum2d(int width, int height){
+        x = width;
+        y = height;
+        arr = vector<vector<int>>(x, vector<int>(y, 0));
+    }
 
-    return takoyaki[y2][x2] - (x1 - 1 > -1 ? takoyaki[y2][x1-1] : 0) - (y1 - 1 > -1 ? takoyaki[y1-1][x2] : 0) + (y1 -1 > -1 && x1 -1 > -1 ? takoyaki[y1-1][x1-1] : 0);
+    void init(vector<vector<int>> vec){
+        arr = vec;
+        x = arr[0].size();
+        y = arr.size();
+        
+    }
 
-}
+    void add(int x1, int y1, int x2, int y2, int val = 1){
+        arr[y1][x1] += val;
+        if(x2 + 1 < x) arr[y1][x2 + 1] -= val;
+        if(y2 + 1 < y) arr[y2 + 1][x1] -= val;
+        if(x2 + 1 < x && y2 + 1 < y) arr[y2 + 1][x2 + 1] += val; 
+    }
 
-int takosum(int a){
-    int tako = 0;
-    rep(i,0,n){
-        rep(j,0,n){
-            rep(k,1,a + 1){// k = height , a/k = width
-                chmax(tako, cumsum(i,j, i + k - 1, j + (a / k) - 1));
+    void build(){
+        for(int i = 0; i < y; i++){
+            for(int j = 1; j < x; j++){
+                arr[i][j] += arr[i][j - 1];
+            }
+        }
+        for(int i = 1; i < y; i++){
+            for(int j = 0; j < x; j++){
+                arr[i][j] += arr[i - 1][j];
             }
         }
     }
-    return tako;
 
-}
+    int query(int x1, int y1, int x2, int y2){
+        int ret = arr[y2][x2];
+        if(-1 < x1 - 1) ret -= arr[y2][x1 - 1];
+        if(-1 < y1 - 1) ret -= arr[y1 - 1][x2];
+        if(-1 < x1 - 1 && -1 < y1 - 1) ret += arr[y1 - 1][x1 - 1];
+        return ret;
+    }
+
+};
+
 
 
 signed main(){
@@ -96,35 +100,42 @@ signed main(){
     cin.tie(0);
     ios::sync_with_stdio(false);
 
-    n = input();
+    int n = input();
+
+    vec<vi> arr(n, vi(n,0));
 
     rep(i,0,n){
-        vector<int> tmp; rep(j,0,n) tmp.push_back(input());
-        takoyaki.push_back(cs(tmp));
-    }
-
-    rep(i,1,n){
         rep(j,0,n){
-            takoyaki[i][j] = takoyaki[i-1][j] + takoyaki[i][j];
+            arr[i][j] = input();
         }
     }
+    cumsum2d cs = cumsum2d(n, n);
+    cs.init(arr);
 
-    int m = input();
+    cs.build();
 
-    vector<int> takoarea(n * n + 10, 0);
-    
+
+
+
+    int mx[n * n + 10]; memset(mx, 0, sizeof(mx));
+
     rep(i,0,n){
         rep(j,0,n){
-            rep(k,1,n+1){
-                rep(l,1,n+1){
-                    chmax(takoarea[k * l], cumsum(i,j, i + k - 1, j + l -1));
+            rep(k,i,n){
+                rep(l,j,n){
+                    chmax(mx[(k - i + 1) * (l - j + 1)], cs.query(i,j,k,l));
                 }
             }
         }
     }
-    
-    rep(i,1,takoarea.size()){
-        chmax(takoarea[i], takoarea[i-1]);
+
+    rep(i,1,n * n + 10) chmax(mx[i], mx[i - 1]);
+
+    int q = input();
+
+    rep(i,0,q){
+        int area = input();
+        print(mx[area]);
     }
 
 
@@ -132,14 +143,32 @@ signed main(){
 
 
 
-    rep(i,0,m){
+    
 
-        print(takoarea[input()]);
-    }
+
+    
+    
+
+    
+    
+
+
+
+
+
+
+    
+
+
+
 
     
 
     
+
+
+
+
 
     
 
@@ -149,10 +178,74 @@ signed main(){
 
 
     
+
+    
+
+    
+
+
+
+    
+    
+
+
+
+    
+
+
+
+
+
+
+
+    
+
+    
+
+    
+
+
+
+
+    
+
+
+
+    
+
+
+
+    
+
+ 
+    
+    
+
+
+    
+
+    
    
     
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
 
     
 
@@ -163,4 +256,20 @@ signed main(){
 
 
 
-}   
+
+
+    
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
