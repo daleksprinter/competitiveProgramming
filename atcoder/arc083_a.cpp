@@ -60,7 +60,7 @@ signed main(){
     int a, b, c, d, e, f; cin >> a >> b >> c >> d >> e >> f;
 
 
-    double ans = -1;
+    double ans = 0.0;
     int s = 0;
     int sugar = 0;
 
@@ -85,9 +85,10 @@ signed main(){
             }
         }
     }
-   
-   
-   
+    if(s == 0){
+        cout << a * 100 << " " << 0 << endl;
+        return 0;
+    }
     cout << s << " " << sugar << endl;
 
 
