@@ -5,7 +5,7 @@ using namespace std;
 /* macro */
 #define rep(i,a,b) for(int i=a;i<b;i++)
 #define revrep(i,a,b) for(int i = a; i > b; i--)
-//#define int long long
+#define int long long
 #define exist(s,e) ((s).find(e)!=(s).end())
 #define all(v) (v).begin(), (v).end()
 #define each(s,itr) for(auto (itr) = s.begin(); (itr) != s.end(); (itr)++)
@@ -22,7 +22,7 @@ typedef pair<int, int> pi;
 
 
 /* constant */
-//const int inf = pow(2, 62);
+const int inf = pow(2, 62);
 const int mod = 1e9 + 7;
 int dx[8]={1,0,-1,0,-1,1,-1,1};
 int dy[8]={0,1,0,-1,-1,-1,1,1};
