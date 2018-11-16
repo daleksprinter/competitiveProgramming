@@ -64,21 +64,11 @@ signed main(){
 
     vi arr; arr.pb(0); rep(i,0,n) arr.pb(input());
 
-    vi tmp;
-    
-    rep(i,0,n + 1) rep(j,0,n + 1) tmp.pb(arr[i] + arr[j]);
-
-    sort(all(tmp));
+    rep(i,0,n + 1) rep(j,0,n + 1) arr.pb(arr[i] + arr[j]);
+    sort(all(arr));
 
     int ans = 0;
-
-    for(int e : tmp){
-
-        if(e > m) continue;
-
-        chmax(ans, e + *(--upper_bound(all(tmp), m - e)));
-
-    }
+    for(int e : arr) if(e <= m) chmax(ans, e + *(--upper_bound(all(arr), m - e)));
 
     print(ans);
 
