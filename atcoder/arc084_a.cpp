@@ -47,6 +47,42 @@ template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } retu
 
 /* main */
 
+vector<int> factors(int n){
+    vector<int> facts;
+    int i = 1;
+    while(i*i < n){
+        if(n % i == 0){
+            facts.push_back(i);
+            facts.push_back(n/i);
+        }
+        i++;
+    }
+    int sq = (int)sqrt(n);
+    if(sq * sq == n) facts.push_back(sq);
+    sort(all(facts));
+    return facts;
+    
+}
+
+vi primefact(int n){
+
+    vi ret;
+    int t = n;
+
+    rep(i,2,sqrt(t + 10)){
+        if(n % i == 0){
+            while(n % i == 0){
+                ret.push_back(i);
+                n /= i;
+            }
+        }
+    }
+    if(n > 1) ret.push_back(n);
+    sort(all(ret));
+
+    return ret;
+
+}
 
 signed main(){
 
@@ -55,6 +91,7 @@ signed main(){
 
     
     int n = input();
+
 
     vi a; rep(i,0,n) a.pb(input()); sort(all(a));
     vi b; rep(i,0,n) b.pb(input()); sort(all(b));
