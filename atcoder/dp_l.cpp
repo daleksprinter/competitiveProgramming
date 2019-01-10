@@ -49,23 +49,19 @@ vi arr;
 
 int dp[3010][3010];
 
-int dfs(int left, int right){
+int dfs(int l, int r){
 
-    if(left > right) return 0;
+    if(l > r) return 0;
 
-    if(dp[left][right] > -inf) return dp[left][right];
+    if(dp[l][r] > -inf) return dp[l][r];
 
-    if(((right - left + 1) ^ n) % 2 == 0){
-        return dp[left][right] = max(arr[left] + dfs(left + 1, right), arr[right] + dfs(left, right - 1));
+    if(!(((r - l + 1) ^ n) & 1)){
+        return dp[l][r] = max(arr[l] + dfs(l + 1, r), arr[r] + dfs(l, r - 1));
     }else{
-        return dp[left][right] = min(dfs(left + 1, right) - arr[left], dfs(left, right - 1) - arr[right]);
+        return dp[l][r] = min(dfs(l + 1, r) - arr[l], dfs(l, r - 1) - arr[r]);
     }
     
-
-
 }
-
-
 
 
 signed main(){
@@ -75,7 +71,7 @@ signed main(){
     ios::sync_with_stdio(false);
 
     n = input();
-    rep(i,0,n) arr.push_back(input());
+    rep(i,0,n) arr.pb(input());
 
     rep(i,0,3010) rep(j,0,3010) dp[i][j] = -inf;
 
