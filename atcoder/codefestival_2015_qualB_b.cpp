@@ -57,20 +57,14 @@ void in(){
 }
 
 void solve(){
-
-    map<int, int> mp;
+    
     rep(i,0, m + 1){
         int cnt = distance(lower_bound(all(arr), i), upper_bound(all(arr), i));
-        mp[i] = cnt;
-    }
-
-    each(mp, itr){
-        if(itr -> second > n / 2){
-            print(itr -> first);
+        if(cnt > n/2){
+            print(i);
             return ;
         }
     }
-
     print("?");
 
 }
