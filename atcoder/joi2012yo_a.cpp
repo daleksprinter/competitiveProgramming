@@ -12,6 +12,7 @@ using namespace std;
 #define isin(a, b, c) (b <= a && a <= c)
 #define println cout << "\n";
 #define sz(v) (int)v.size()
+#define bin(x) static_cast<bitset<16> >(x)
 
 
 /* alias */
@@ -48,18 +49,23 @@ template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } retu
 template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
 template<class T>T cut(T &a, int l, int r){return T(a.begin()+l, a.begin()+r);}
 
+
+/* math_method */
+int ceil(int a, int b){return a / b + (a % b > 0);}
+
+
 /* main */
 
-int a, b, c, d, e;
+vi arr;
+int a, b;
 void in(){
-    cin >> a >> b >> c >> d >> e;
+    rep(i,0,3) arr.push_back(input());
+    cin >> a >> b;
 }
 
 void solve(){
 
-    print(min({a, b, c}) + min(d, e) - 50);
-
-
+    print(*min_element(all(arr)) + min(a, b) - 50);
 }
 
 signed main(){
