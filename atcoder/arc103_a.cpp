@@ -1,61 +1,106 @@
-#include <bits/stdc++.h>
+#include "bits/stdc++.h"
 using namespace std;
+
+/* macro */
 #define rep(i,a,b) for(int i=a;i<b;i++)
-#define revrep(i,a,b) for(int i=a;i>b;i--)
+#define revrep(i,a,b) for(int i = a; i > b; i--)
 #define int long long
+#define exist(s,e) ((s).find(e)!=(s).end())
+#define all(v) (v).begin(), (v).end()
+#define each(s,itr) for(auto (itr) = s.begin(); (itr) != s.end(); (itr)++)
+#define sum(v) accumulate(all(v), (0LL))
+#define isin(a, b, c) (b <= a && a <= c)
+#define println cout << "\n";
+#define sz(v) (int)v.size()
+#define bin(x) static_cast<bitset<16> >(x)
 
-const int inf = 100100100100000;
-const int mod = 1000000007;
-int dx[4]={1,0,-1,0};
-int dy[4]={0,1,0,-1};
 
+/* alias */
+template<class T> using vec = vector<T>;
+typedef vector<int> vi;
+typedef pair<int, int> pi;
+typedef tuple<int, int, int> ti;
+typedef map<int, int> mi;
+typedef set<int> si;
+
+
+/* constant */
+const int inf = 1LL << 62;
+const int mod = 1e9 + 7;
+const int dx[8]={1,0,-1,0,-1,1,-1,1};
+const int dy[8]={0,1,0,-1,-1,-1,1,1};
+const string alphabet = "abcdefghijklmnopqrstuvwxyz";
+
+/* io_method */
 int input(){int tmp;cin >> tmp;return tmp;}
 string raw_input(){string tmp;cin >> tmp;return tmp;}
-string readline(){string s;getline(cin, s);return s;}
-void print(int n){cout << n << endl;}
-void print(vector<int> arr){cout << arr[0];rep(i,1,arr.size()) cout << " " << arr[i];cout << endl;}
-void print(string s){cout << s << endl;}
-void print(pair<int, int> p){cout << p.first << " " << p.second;}
-void print(vector<vector<int>> arr){rep(i,0,arr.size()){print(arr[i]);}}
-void print(double n){cout << n << endl;}
-int ceil(int a, int b){if(a%b == 0) return a/b;else return a/b + 1;}
-
-//main-----------------------------------------------------------------------------
+template<class T> void printx(T n){cout << n;}
+template<class T, class U> void printx(pair<T, U> p){cout << "(" << p.first << "," << p.second << ")";}
+template<class T, class U, class V> void printx(tuple<T, U, V> t){cout << "{" << get<0>(t) << "," << get<1>(t) <<"," << get<2>(t) << "}" << endl;}
+template<class T> void printx(vector<T> v){cout << "{";rep(i,0,v.size()){printx(v[i]);if(i != v.size()-1)printx(",");}cout << "}";}
+template<class T> void print(T n){printx(n);cout << endl;}
+template<class T> void print(set<T> s){cout << "{";each(s, e){if(e != s.begin()) printx(",");printx(*e);}cout << "}" << endl;}
+template<class T, class U> void print(map<T, U> mp){cout << "{";each(mp, e){cout << "(" << e -> first << "," << e -> second << ")";}cout << "}" << endl;}
+template<class T> void printans(vec<T> v){rep(i,0,sz(v)){cout << v[i] << (i == sz(v) - 1 ? "" : " ");}cout << endl;}
 
 
-signed main(){
-    std::ios::sync_with_stdio(false);
-    std::cin.tie(0);
-    
-    int n = input();
+/* general_method */
+template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
+template<class T>T cut(T &a, int l, int r){return T(a.begin()+l, a.begin()+r);}
 
-    vector<int> arr; rep(i,0,n) arr.push_back(input());
 
-    vector<pair<int, int>> a;
-    vector<pair<int, int>> b;
+/* math_method */
+int ceil(int a, int b){return a / b + (a % b > 0);}
 
-    rep(i,0,100001){
-        a.push_back(make_pair(0, i));
-        b.push_back(make_pair(0, i));
+
+/* main */
+
+int n;
+vi arr;
+void in(){
+    cin >> n;
+    rep(i,0,n) arr.push_back(input());
+}
+
+void solve(){
+
+    vector<pair<int, int>> arr1;
+    vector<pair<int, int>> arr2;
+    rep(i,0,101010){
+        arr1.push_back(pi(0, i));
+        arr2.push_back(pi(0, i));
     }
 
     rep(i,0,n){
-        if(i % 2 == 0) a[arr[i]].first++;
-        else{ b[arr[i]].first++;}
+        if(i % 2 == 0){
+            arr1[arr[i]].first++;
+        }else{
+            arr2[arr[i]].first++;
+        }
     }
 
-    sort(a.begin(), a.end(), greater<pair<int, int>>());
-    sort(b.begin(), b.end(), greater<pair<int, int>>());
+    sort(all(arr1));
+    reverse(all(arr1));
+    sort(all(arr2));
+    reverse(all(arr2));
+    
 
-    if(a[0].second == b[0].second){
-        print(min(n - a[0].first - b[1].first, n - a[1].first - b[0].first));
-
-    }else{
-        print(n - a[0].first - b[0].first);
+    if(arr1[0].second == arr2[0].second){
+        print(min(n - arr1[0].first - arr2[1].first, n - arr1[1].first - arr2[0].first));
+    }else{  
+        print(n - arr1[0].first - arr2[0].first);
     }
+    
 
 
+}
 
+signed main(){
 
-
+    cin.tie(0);
+    ios::sync_with_stdio(false);
+    in();
+    solve();
+    
 }
