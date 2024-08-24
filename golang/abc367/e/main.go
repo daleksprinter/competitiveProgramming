@@ -19,12 +19,11 @@ var (
 )
 
 func input_arr() []int {
-
-	sc.Scan()                             // １行分の入力を取得する
-	strs := strings.Split(sc.Text(), " ") // 半角スペース区切りでstring型として配列inputsに格納
+	sc.Scan()
+	strs := strings.Split(sc.Text(), " ")
 	nums := make([]int, len(strs))
 	for i, s := range strs {
-		nums[i], _ = strconv.Atoi(s) // エラーハンドリング省略
+		nums[i], _ = strconv.Atoi(s)
 	}
 	return nums
 }
@@ -55,46 +54,68 @@ func output_arr(arr []int) {
 	fmt.Println()
 }
 
-func main() {
+type permuteTable struct {
+	table [][]int
+}
 
-	initialBufSize := 10000
-	maxBufSize := 100000000
-	buf := make([]byte, initialBufSize)
-	sc.Buffer(buf, maxBufSize)
-	n, k := input(), input()
-	x := input_arr()
-
+func newPermuteTable(n int) *permuteTable {
 	p := make([][]int, 60)
-	for i := 0; i < 60; i++ {
-		p[i] = make([]int, n+1)
+	for lv := 0; lv < 60; lv++ {
+		p[lv] = make([]int, n+1)
 	}
+	return &permuteTable{table: p}
+}
+
+func (p *permuteTable) build(n int, x []int) {
 	for i := 1; i <= n; i++ {
-		p[0][i] = x[i-1]
+		p.table[0][i] = x[i-1]
 	}
 	for lv := 1; lv < 60; lv++ {
 		for j := 1; j <= n; j++ {
-			p[lv][j] = p[lv-1][p[lv-1][j]]
+			p.table[lv][j] = p.table[lv-1][p.table[lv-1][j]]
 		}
 	}
+}
+
+func (p *permuteTable) get(lv int) []int {
+	return p.table[lv]
+}
+
+func solve(n int, k int, x []int, a []int) (ans []int) {
+	pt := newPermuteTable(n)
+	pt.build(n, x)
+
 	arr := make([]int, n+1)
 	for i := 1; i <= n; i++ {
 		arr[i] = i
 	}
 	for lv := 0; lv < 60; lv++ {
+		tbl := pt.get(lv)
 		if k%2 == 1 {
 			for i := 1; i <= n; i++ {
-				arr[i] = p[lv][arr[i]]
+				arr[i] = tbl[arr[i]]
 			}
 		}
 		k /= 2
 	}
 
-	ans := make([]int, n+1)
-
-	a := input_arr()
+	ans = make([]int, n+1)
 	for i := 1; i <= n; i++ {
 		ans[i] = a[arr[i]-1]
 	}
-	output_arr(ans[1 : n+1])
+	return ans[1 : n+1]
 
+}
+
+func main() {
+	initialBufSize := 10000
+	maxBufSize := 100000000
+	buf := make([]byte, initialBufSize)
+	sc.Buffer(buf, maxBufSize)
+
+	n, k := input(), input()
+	x := input_arr()
+	a := input_arr()
+
+	output_arr(solve(n, k, x, a))
 }

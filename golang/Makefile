@@ -23,6 +23,12 @@ $(INPUT_DIR):
 $(ANS_DIR):
 	mkdir -p $(ANS_DIR)
 
+$(INPUT_DIR)/%: $(INPUT_DIR)
+	touch $@
+
+$(ANS_DIR)/%: $(ANS_DIR)
+	touch $@
+
 .PHONY: run
 run:
 	go run $(contest)/$(problem)/main.go
