@@ -1,10 +1,39 @@
-TEMPLATE_PATH=template.go
-contest=
-problem=d
+TEMPLATE := template.go
+contest :=
+problem :=
+INPUT_DIR := $(contest)/$(problem)/inputs
+ANS_DIR := $(contest)/$(problem)/ans
+num :=
 
-setup:
-	mkdir -p $(contest)/code
-	echo {a,b,c,d,e,f}\\n | xargs -IXXX cp ${TEMPLATE_PATH} $(contest)/code/XXX.go
+$(contest):
+	mkdir -p $(contest)
 
+$(contest)/$(problem): $(contest)
+	mkdir -p $(contest)/$(problem)
+
+$(contest)/$(problem)/main.go: $(contest)/$(problem) $(TEMPLATE)
+	cp ${TEMPLATE} $(contest)/$(problem)/main.go
+
+.PHONY: setup
+setup: $(contest)/$(problem)/main.go $(INPUT_DIR) $(ANS_DIR)
+
+$(INPUT_DIR):
+	mkdir -p $(INPUT_DIR)
+
+$(ANS_DIR):
+	mkdir -p $(ANS_DIR)
+
+.PHONY: run
 run:
-	go run $(contest)/code/$(problem).go
+	go run $(contest)/$(problem)/main.go
+
+.PHONY: test
+test: $(INPUT_DIR)/$(num) $(ANS_DIR)/$(num)
+	go run $(contest)/$(problem)/main.go < $(INPUT_DIR)/$(num) | diff - $(ANS_DIR)/$(num)
+
+.PHONY: test-all
+test-all:
+	for i in $(shell ls $(INPUT_DIR)); do \
+		$(MAKE) test num=$$i; \
+	done
+
