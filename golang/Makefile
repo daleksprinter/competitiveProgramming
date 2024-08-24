@@ -6,7 +6,7 @@ ANS_DIR := $(contest)/$(problem)/ans
 num :=
 
 $(contest):
-	mkdir -p $(contest)
+	mkdir -p $@
 
 $(contest)/$(problem): $(contest)
 	mkdir -p $(contest)/$(problem)
@@ -14,14 +14,11 @@ $(contest)/$(problem): $(contest)
 $(contest)/$(problem)/main.go: $(contest)/$(problem) $(TEMPLATE)
 	cp ${TEMPLATE} $(contest)/$(problem)/main.go
 
-.PHONY: setup
-setup: $(contest)/$(problem)/main.go $(INPUT_DIR) $(ANS_DIR)
-
 $(INPUT_DIR):
-	mkdir -p $(INPUT_DIR)
+	mkdir -p $@
 
 $(ANS_DIR):
-	mkdir -p $(ANS_DIR)
+	mkdir -p $@
 
 $(INPUT_DIR)/%: $(INPUT_DIR)
 	touch $@
@@ -29,9 +26,15 @@ $(INPUT_DIR)/%: $(INPUT_DIR)
 $(ANS_DIR)/%: $(ANS_DIR)
 	touch $@
 
+.PHONY: setup
+setup: $(contest)/$(problem)/main.go $(INPUT_DIR) $(ANS_DIR)
+
 .PHONY: run
 run:
 	go run $(contest)/$(problem)/main.go
+
+.PHONY: add-test
+add-test: $(INPUT_DIR)/$(num) $(ANS_DIR)/$(num)
 
 .PHONY: test
 test: $(INPUT_DIR)/$(num) $(ANS_DIR)/$(num)
