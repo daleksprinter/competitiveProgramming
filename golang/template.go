@@ -54,6 +54,20 @@ func output_arr(arr []int) {
 	fmt.Println()
 }
 
+func nextInt() int {
+	sc.Scan()
+	i, e := strconv.Atoi(sc.Text())
+	if e != nil {
+		panic(e)
+	}
+	return i
+}
+
 func main() {
+	initialBufSize := 10000
+	maxBufSize := 100000000
+	buf := make([]byte, initialBufSize)
+	sc.Buffer(buf, maxBufSize)
+	sc.Split(bufio.ScanWords)
 
 }

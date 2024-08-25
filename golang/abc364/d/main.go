@@ -108,8 +108,8 @@ func main() {
 	maxBufSize := 100000000
 	buf := make([]byte, initialBufSize)
 	sc.Buffer(buf, maxBufSize)
-
 	sc.Split(bufio.ScanWords)
+
 	n, q = nextInt(), nextInt()
 	for i := 0; i < n; i++ {
 		a = append(a, nextInt())
