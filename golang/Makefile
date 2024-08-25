@@ -45,4 +45,3 @@ test-all:
 	for i in $(shell ls $(INPUT_DIR)); do \
 		$(MAKE) test num=$$i; \
 	done
-
