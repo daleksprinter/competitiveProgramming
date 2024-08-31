@@ -46,7 +46,7 @@ func print_arr2(arr [][]int) {
 	}
 }
 
-func output_arr(arr []int) {
+func output_arr(arr []int64) {
 	for i, v := range arr {
 		if i != 0 {
 			fmt.Print(" ")
@@ -65,14 +65,23 @@ func nextInt() int {
 	return i
 }
 
+func nextInt64() int64 {
+	sc.Scan()
+	i, e := strconv.ParseInt(sc.Text(), 10, 64)
+	if e != nil {
+		panic(e)
+	}
+	return i
+}
+
 var (
 	n, m int
-	a    []int
-	b    map[int]map[int]int
+	a    []int64
+	b    map[int]map[int]int64
 )
 
 type Item struct {
-	cost int
+	cost int64
 	node int
 }
 
@@ -101,9 +110,9 @@ func (pq *PriorityQueue) Pop() any {
 }
 
 func solve() {
-	minCosts := make([]int, n)
+	minCosts := make([]int64, n)
 	for i := 0; i < n; i++ {
-		minCosts[i] = int(math.Inf(1))
+		minCosts[i] = int64(math.Inf(1))
 	}
 
 	pq := make(PriorityQueue, 0)
@@ -122,10 +131,9 @@ func solve() {
 		node := item.node
 		cost := item.cost
 
-		if minCosts[node] < cost {
+		if minCosts[node] <= cost {
 			continue
 		}
-
 		minCosts[node] = cost
 
 		for nextNode, nextCost := range b[node] {
@@ -136,7 +144,12 @@ func solve() {
 			heap.Push(&pq, &nextItem)
 		}
 	}
-	output_arr(minCosts[1:])
+	strSl := []string{}
+	for _, v := range minCosts[1:] {
+		// intSlの値を文字列にしてstrSlに突っ込む
+		strSl = append(strSl, strconv.FormatInt(v, 10))
+	}
+	fmt.Println(strings.Join(strSl, " "))
 }
 
 func main() {
@@ -144,19 +157,23 @@ func main() {
 	maxBufSize := 100000000
 	buf := make([]byte, initialBufSize)
 	sc.Buffer(buf, maxBufSize)
-	b = make(map[int]map[int]int)
+	b = make(map[int]map[int]int64)
 
 	sc.Split(bufio.ScanWords)
 	n, m = nextInt(), nextInt()
 	for i := 0; i < n; i++ {
-		a = append(a, nextInt())
+		a = append(a, nextInt64())
 	}
 	for i := 0; i < m; i++ {
-		f, t, c := nextInt()-1, nextInt()-1, nextInt()
+		f, t, c := nextInt()-1, nextInt()-1, nextInt64()
 		if _, ok := b[f]; !ok {
-			b[f] = make(map[int]int)
+			b[f] = make(map[int]int64)
 		}
 		b[f][t] = c
+		if _, ok := b[t]; !ok {
+			b[t] = make(map[int]int64)
+		}
+		b[t][f] = c
 	}
 	solve()
 }
