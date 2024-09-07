@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -54,15 +53,17 @@ func output_arr(arr []int) {
 	}
 	fmt.Println()
 }
-func min(nums ...int) int {
+func min[T int | int64](nums ...T) T {
 	if len(nums) == 0 {
 		panic("funciton min() requires at least one argument.")
 	}
-	res := nums[0]
-	for i := 0; i < len(nums); i++ {
-		res = int(math.Min(float64(res), float64(nums[i])))
+	minValue := nums[0]
+	for _, num := range nums[1:] {
+		if num < minValue {
+			minValue = num
+		}
 	}
-	return res
+	return minValue
 }
 
 func max[T int | int64](nums ...T) T {
