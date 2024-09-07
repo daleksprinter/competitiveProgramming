@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -86,6 +87,46 @@ func nextInt() int {
 		panic(e)
 	}
 	return i
+}
+
+func lowerBound(arr []int, x int) int {
+	return sort.Search(len(arr), func(i int) bool {
+		return arr[i] >= x
+	})
+}
+
+func upperBound(arr []int, x int) int {
+	return sort.Search(len(arr), func(i int) bool {
+		return arr[i] > x
+	})
+}
+
+type Item struct {
+	priority int
+}
+
+type PriorityQueue []*Item
+
+func (pq PriorityQueue) Len() int { return len(pq) }
+func (pq PriorityQueue) Less(i, j int) bool {
+	return pq[i].priority < pq[j].priority
+}
+
+func (pq PriorityQueue) Swap(i, j int) {
+	pq[i], pq[j] = pq[j], pq[i]
+}
+
+func (pq *PriorityQueue) Push(x any) {
+	item := x.(*Item)
+	*pq = append(*pq, item)
+}
+
+func (pq *PriorityQueue) Pop() any {
+	old := *pq
+	n := len(old)
+	x := old[n-1]
+	*pq = old[0 : n-1]
+	return x
 }
 
 func main() {
