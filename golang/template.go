@@ -65,6 +65,19 @@ func min(nums ...int) int {
 	return res
 }
 
+func max[T int | int64](nums ...T) T {
+	if len(nums) == 0 {
+		panic("max: no values provided")
+	}
+	maxValue := nums[0]
+	for _, num := range nums[1:] {
+		if num > maxValue {
+			maxValue = num
+		}
+	}
+	return maxValue
+}
+
 func nextInt() int {
 	sc.Scan()
 	i, e := strconv.Atoi(sc.Text())
