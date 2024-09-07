@@ -1,4 +1,4 @@
-TEMPLATE := template.go
+TEMPLATE := main.template.go
 contest :=
 problem :=
 INPUT_DIR := $(contest)/$(problem)/inputs
