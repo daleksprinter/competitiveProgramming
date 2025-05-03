@@ -14,8 +14,11 @@ $(contest)/$(problem): $(contest)
 $(contest)/$(problem)/main.go: $(contest)/$(problem) $(TEMPLATE)
 	cp ${TEMPLATE} $(contest)/$(problem)/main.go
 
+$(contest)/$(problem)/main_test.go: $(contest)/$(problem) main_test.template.go
+	cp main_test.template.go $(contest)/$(problem)/main_test.go
+
 $(contest)/$(problem)/go.mod: $(contest)/$(problem)
-	go mod init $(contest)/$(problem)
+	cd $(contest)/$(problem) && go mod init $(contest)/$(problem)
 
 $(INPUT_DIR):
 	mkdir -p $@
@@ -30,7 +33,7 @@ $(ANS_DIR)/%: $(ANS_DIR)
 	touch $@
 
 .PHONY: setup
-setup: $(contest)/$(problem)/main.go $(contest)/$(problem)/go.mod $(INPUT_DIR) $(ANS_DIR)
+setup: $(contest)/$(problem)/main.go $(contest)/$(problem)/go.mod $(contest)/$(problem)/main_test.go $(INPUT_DIR) $(ANS_DIR)
 
 .PHONY: run
 run:
